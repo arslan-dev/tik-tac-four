@@ -1,6 +1,6 @@
 # 4x4 Tic-Tac-Toe Console Game
 
-A console-based 4x4 tic-tac-toe game written in Python with two game modes.
+A console-based 4x4 tic-tac-toe game written in Rust with two game modes.
 
 ## Features
 
@@ -9,12 +9,12 @@ A console-based 4x4 tic-tac-toe game written in Python with two game modes.
   - Player vs Player: Play against a friend
   - Player vs Computer: Play against an AI opponent
 - **Smart AI**: Computer can win and block opponent moves
-- **Interactive Console UI**: Clear board display with numbered cells
+- **Beautiful Console UI**: Unicode box-drawing characters for elegant display
 - **Win Detection**: Horizontal, vertical, and diagonal win patterns
 
 ## Requirements
 
-- Python 3.6 or higher
+- Rust 1.56 or higher (install from [rustup.rs](https://rustup.rs/))
 
 ## How to Play
 
@@ -25,9 +25,15 @@ A console-based 4x4 tic-tac-toe game written in Python with two game modes.
    git checkout claude/tic-tac-toe-four-player-modes-011CUz55c48yp3orue59S91m
    ```
 
-2. **Run the game**:
+2. **Build and run the game**:
    ```bash
-   python3 tictactoe.py
+   cargo run --release
+   ```
+
+   Or build and run separately:
+   ```bash
+   cargo build --release
+   ./target/release/tik-tac-four
    ```
 
 3. **Game Instructions**:
@@ -40,15 +46,15 @@ A console-based 4x4 tic-tac-toe game written in Python with two game modes.
 ## Game Board Layout
 
 ```
-  =========================================
-  |  0 |  1 |  2 |  3 |
-  |----|----|----|----|
-  |  4 |  5 |  6 |  7 |
-  |----|----|----|----|
-  |  8 |  9 | 10 | 11 |
-  |----|----|----|----|
-  | 12 | 13 | 14 | 15 |
-  =========================================
+  ╔═════╦═════╦═════╦═════╗
+  ║  0  ║  1  ║  2  ║  3  ║
+  ╠═════╬═════╬═════╬═════╣
+  ║  4  ║  5  ║  6  ║  7  ║
+  ╠═════╬═════╬═════╬═════╣
+  ║  8  ║  9  ║ 10  ║ 11  ║
+  ╠═════╬═════╬═════╬═════╣
+  ║ 12  ║ 13  ║ 14  ║ 15  ║
+  ╚═════╩═════╩═════╩═════╝
 ```
 
 ## Winning Patterns
@@ -70,15 +76,15 @@ The computer AI follows this strategy:
 ```
 Player X, enter cell number (0-15) or 'quit': 5
 
-  =========================================
-  |  0 |  1 |  2 |  3 |
-  |----|----|----|----|
-  |  4 |  X |  6 |  7 |
-  |----|----|----|----|
-  |  8 |  9 | 10 | 11 |
-  |----|----|----|----|
-  | 12 | 13 | 14 | 15 |
-  =========================================
+  ╔═════╦═════╦═════╦═════╗
+  ║  0  ║  1  ║  2  ║  3  ║
+  ╠═════╬═════╬═════╬═════╣
+  ║  4  ║  X  ║  6  ║  7  ║
+  ╠═════╬═════╬═════╬═════╣
+  ║  8  ║  9  ║ 10  ║ 11  ║
+  ╠═════╬═════╬═════╬═════╣
+  ║ 12  ║ 13  ║ 14  ║ 15  ║
+  ╚═════╩═════╩═════╩═════╝
 ```
 
 ## License
