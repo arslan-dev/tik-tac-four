@@ -9,7 +9,7 @@ A console-based 4x4 tic-tac-toe game written in Rust with two game modes.
   - Player vs Player: Play against a friend
   - Player vs Computer: Play against an AI opponent
 - **Smart AI**: Computer can win and block opponent moves
-- **Beautiful Console UI**: Unicode box-drawing characters for elegant display
+- **Beautiful Console UI**: ASCII art with colorful ANSI escape codes
 - **Win Detection**: Horizontal, vertical, and diagonal win patterns
 
 ## Requirements
@@ -46,16 +46,23 @@ A console-based 4x4 tic-tac-toe game written in Rust with two game modes.
 ## Game Board Layout
 
 ```
-  ╔═════╦═════╦═════╦═════╗
-  ║  0  ║  1  ║  2  ║  3  ║
-  ╠═════╬═════╬═════╬═════╣
-  ║  4  ║  5  ║  6  ║  7  ║
-  ╠═════╬═════╬═════╬═════╣
-  ║  8  ║  9  ║ 10  ║ 11  ║
-  ╠═════╬═════╬═════╬═════╣
-  ║ 12  ║ 13  ║ 14  ║ 15  ║
-  ╚═════╩═════╩═════╩═════╝
+  +-------+-------+-------+-------+
+  |   0   |   1   |   2   |   3   |
+  +-------+-------+-------+-------+
+  |   4   |   5   |   6   |   7   |
+  +-------+-------+-------+-------+
+  |   8   |   9   |  10   |  11   |
+  +-------+-------+-------+-------+
+  |  12   |  13   |  14   |  15   |
+  +-------+-------+-------+-------+
 ```
+
+The game uses ANSI colors:
+- Grid borders: Cyan
+- Cell numbers: Yellow
+- Player X: Red (bold)
+- Player O: Blue (bold)
+- Computer moves: Magenta
 
 ## Winning Patterns
 
@@ -76,16 +83,18 @@ The computer AI follows this strategy:
 ```
 Player X, enter cell number (0-15) or 'quit': 5
 
-  ╔═════╦═════╦═════╦═════╗
-  ║  0  ║  1  ║  2  ║  3  ║
-  ╠═════╬═════╬═════╬═════╣
-  ║  4  ║  X  ║  6  ║  7  ║
-  ╠═════╬═════╬═════╬═════╣
-  ║  8  ║  9  ║ 10  ║ 11  ║
-  ╠═════╬═════╬═════╬═════╣
-  ║ 12  ║ 13  ║ 14  ║ 15  ║
-  ╚═════╩═════╩═════╩═════╝
+  +-------+-------+-------+-------+
+  |   0   |   1   |   2   |   3   |
+  +-------+-------+-------+-------+
+  |   4   |   X   |   6   |   7   |
+  +-------+-------+-------+-------+
+  |   8   |   9   |  10   |  11   |
+  +-------+-------+-------+-------+
+  |  12   |  13   |  14   |  15   |
+  +-------+-------+-------+-------+
 ```
+
+Note: In the actual game, the grid and text are displayed in vibrant colors!
 
 ## License
 

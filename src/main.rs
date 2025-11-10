@@ -47,54 +47,77 @@ impl Game {
     }
 
     fn display_board(&self) {
+        // ANSI color codes
+        const RESET: &str = "\x1b[0m";
+        const CYAN: &str = "\x1b[36m";
+        const YELLOW: &str = "\x1b[33m";
+        const GREEN: &str = "\x1b[32m";
+        const BLUE: &str = "\x1b[34m";
+        const MAGENTA: &str = "\x1b[35m";
+        const BOLD: &str = "\x1b[1m";
+        const RED: &str = "\x1b[31m";
+
         println!();
-        println!("  ╔═════╦═════╦═════╦═════╗");
+        println!("  {}+-------+-------+-------+-------+{}", CYAN, RESET);
 
         for row in 0..4 {
-            print!("  ║");
+            print!("  {}|{}", CYAN, RESET);
             for col in 0..4 {
                 let index = row * 4 + col;
                 let cell_str = match self.board[index] {
-                    Cell::Empty => format!(" {:2} ", index),
-                    Cell::X => "  X ".to_string(),
-                    Cell::O => "  O ".to_string(),
+                    Cell::Empty => format!("{}  {:2}   {}", YELLOW, index, RESET),
+                    Cell::X => format!("{}{}   X   {}{}", BOLD, RED, RESET, RESET),
+                    Cell::O => format!("{}{}   O   {}{}", BOLD, BLUE, RESET, RESET),
                 };
                 print!("{}", cell_str);
-                print!("║");
+                print!("{}|{}", CYAN, RESET);
             }
             println!();
 
             if row < 3 {
-                println!("  ╠═════╬═════╬═════╬═════╣");
+                println!("  {}+-------+-------+-------+-------+{}", CYAN, RESET);
             }
         }
 
-        println!("  ╚═════╩═════╩═════╩═════╝");
+        println!("  {}+-------+-------+-------+-------+{}", CYAN, RESET);
         println!();
     }
 
     fn display_instructions() {
-        println!("\n╔══════════════════════════════════════════════════╗");
-        println!("║         4x4 TIC-TAC-TOE GAME                     ║");
-        println!("╚══════════════════════════════════════════════════╝");
-        println!("\n📋 Game Rules:");
-        println!("   • The board is 4x4 (16 cells)");
-        println!("   • Players take turns placing X or O");
-        println!("   • Get 4 in a row to win (horizontal, vertical, or diagonal)");
-        println!("   • Cells are numbered 0-15");
-        println!("\n🎮 How to play:");
-        println!("   • Enter the cell number (0-15) when prompted");
-        println!("   • Type 'quit' to exit the game");
-        println!("\n══════════════════════════════════════════════════");
+        const CYAN: &str = "\x1b[36m";
+        const YELLOW: &str = "\x1b[33m";
+        const GREEN: &str = "\x1b[32m";
+        const RESET: &str = "\x1b[0m";
+        const BOLD: &str = "\x1b[1m";
+
+        println!("\n{}{}+==================================================+{}", BOLD, CYAN, RESET);
+        println!("{}{}|         4x4 TIC-TAC-TOE GAME                     |{}", BOLD, CYAN, RESET);
+        println!("{}{}+==================================================+{}", BOLD, CYAN, RESET);
+        println!("\n{}{} Game Rules:{}", BOLD, GREEN, RESET);
+        println!("   {} * The board is 4x4 (16 cells){}", YELLOW, RESET);
+        println!("   {} * Players take turns placing X or O{}", YELLOW, RESET);
+        println!("   {} * Get 4 in a row to win (horizontal, vertical, or diagonal){}", YELLOW, RESET);
+        println!("   {} * Cells are numbered 0-15{}", YELLOW, RESET);
+        println!("\n{}{} How to play:{}", BOLD, GREEN, RESET);
+        println!("   {} * Enter the cell number (0-15) when prompted{}", YELLOW, RESET);
+        println!("   {} * Type 'quit' to exit the game{}", YELLOW, RESET);
+        println!("\n{}+==================================================+{}", CYAN, RESET);
     }
 
     fn get_game_mode() -> GameMode {
-        println!("\n🎯 Select Game Mode:");
-        println!("   1. Player vs Player");
-        println!("   2. Player vs Computer");
+        const CYAN: &str = "\x1b[36m";
+        const GREEN: &str = "\x1b[32m";
+        const RED: &str = "\x1b[31m";
+        const YELLOW: &str = "\x1b[33m";
+        const RESET: &str = "\x1b[0m";
+        const BOLD: &str = "\x1b[1m";
+
+        println!("\n{}{} >> Select Game Mode:{}", BOLD, CYAN, RESET);
+        println!("   {}[1]{} Player vs Player", YELLOW, RESET);
+        println!("   {}[2]{} Player vs Computer", YELLOW, RESET);
 
         loop {
-            print!("\nEnter your choice (1 or 2): ");
+            print!("\n{}Enter your choice (1 or 2):{} ", GREEN, RESET);
             io::stdout().flush().unwrap();
 
             let mut input = String::new();
@@ -102,15 +125,15 @@ impl Game {
 
             match input.trim() {
                 "1" => {
-                    println!("\n✓ Player vs Player mode selected!");
+                    println!("\n{}{} [OK] Player vs Player mode selected!{}", BOLD, GREEN, RESET);
                     return GameMode::PlayerVsPlayer;
                 }
                 "2" => {
-                    println!("\n✓ Player vs Computer mode selected!");
-                    println!("  You are X, Computer is O");
+                    println!("\n{}{} [OK] Player vs Computer mode selected!{}", BOLD, GREEN, RESET);
+                    println!("{}      You are X, Computer is O{}", CYAN, RESET);
                     return GameMode::PlayerVsComputer;
                 }
-                _ => println!("❌ Invalid choice. Please enter 1 or 2."),
+                _ => println!("{}{} [ERROR] Invalid choice. Please enter 1 or 2.{}", BOLD, RED, RESET),
             }
         }
     }
@@ -147,9 +170,18 @@ impl Game {
     }
 
     fn get_player_move(&self) -> Option<usize> {
+        const RED: &str = "\x1b[31m";
+        const BLUE: &str = "\x1b[34m";
+        const GREEN: &str = "\x1b[32m";
+        const YELLOW: &str = "\x1b[33m";
+        const RESET: &str = "\x1b[0m";
+        const BOLD: &str = "\x1b[1m";
+
         loop {
             let player_symbol = self.current_player.to_string();
-            print!("Player {}, enter cell number (0-15) or 'quit': ", player_symbol);
+            let player_color = if self.current_player == Cell::X { RED } else { BLUE };
+            print!("{}{}Player {}{}, enter cell number (0-15) or 'quit': {}",
+                   BOLD, player_color, player_symbol, RESET, RESET);
             io::stdout().flush().unwrap();
 
             let mut input = String::new();
@@ -157,14 +189,14 @@ impl Game {
             let input = input.trim().to_lowercase();
 
             if input == "quit" {
-                println!("\n👋 Thanks for playing!");
+                println!("\n{}{} Thanks for playing! Goodbye!{}", BOLD, GREEN, RESET);
                 process::exit(0);
             }
 
             match input.parse::<usize>() {
                 Ok(pos) if self.is_valid_move(pos) => return Some(pos),
-                Ok(_) => println!("❌ Invalid move! Cell must be between 0-15 and empty."),
-                Err(_) => println!("❌ Please enter a valid number or 'quit'."),
+                Ok(_) => println!("{}{} [X] Invalid move! Cell must be between 0-15 and empty.{}", BOLD, RED, RESET),
+                Err(_) => println!("{}{} [X] Please enter a valid number or 'quit'.{}", BOLD, YELLOW, RESET),
             }
         }
     }
@@ -196,7 +228,12 @@ impl Game {
     }
 
     fn get_computer_move(&self) -> usize {
-        print!("\n🤖 Computer is thinking");
+        const MAGENTA: &str = "\x1b[35m";
+        const CYAN: &str = "\x1b[36m";
+        const RESET: &str = "\x1b[0m";
+        const BOLD: &str = "\x1b[1m";
+
+        print!("\n{}{} >> Computer is thinking", BOLD, MAGENTA, );
         io::stdout().flush().unwrap();
 
         for _ in 0..3 {
@@ -204,17 +241,18 @@ impl Game {
             print!(".");
             io::stdout().flush().unwrap();
         }
+        print!("{}", RESET);
         println!();
 
         // Try to win
         if let Some(pos) = self.find_best_move(Cell::O) {
-            println!("   Computer plays at position {}", pos);
+            println!("{}    Computer plays at position {}{}", CYAN, pos, RESET);
             return pos;
         }
 
         // Block opponent from winning
         if let Some(pos) = self.find_best_move(Cell::X) {
-            println!("   Computer plays at position {}", pos);
+            println!("{}    Computer plays at position {}{}", CYAN, pos, RESET);
             return pos;
         }
 
@@ -228,7 +266,7 @@ impl Game {
 
         if !available_center.is_empty() {
             let pos = available_center[rand::thread_rng().gen_range(0..available_center.len())];
-            println!("   Computer plays at position {}", pos);
+            println!("{}    Computer plays at position {}{}", CYAN, pos, RESET);
             return pos;
         }
 
@@ -238,7 +276,7 @@ impl Game {
             .collect();
 
         let pos = available_cells[rand::thread_rng().gen_range(0..available_cells.len())];
-        println!("   Computer plays at position {}", pos);
+        println!("{}    Computer plays at position {}{}", CYAN, pos, RESET);
         pos
     }
 
@@ -269,28 +307,42 @@ impl Game {
 
             // Check for winner
             if let Some(pattern) = self.check_winner() {
+                const GREEN: &str = "\x1b[32m";
+                const MAGENTA: &str = "\x1b[35m";
+                const YELLOW: &str = "\x1b[33m";
+                const RED: &str = "\x1b[31m";
+                const BLUE: &str = "\x1b[34m";
+                const RESET: &str = "\x1b[0m";
+                const BOLD: &str = "\x1b[1m";
+
                 self.clear_screen();
                 self.display_board();
-                println!("╔══════════════════════════════════════════════════╗");
+                println!("\n{}{}+==================================================+{}", BOLD, GREEN, RESET);
                 if self.game_mode == GameMode::PlayerVsComputer && self.current_player == Cell::O {
-                    println!("║  🤖 Computer (O) wins!                           ║");
+                    println!("{}{}|  *** COMPUTER (O) WINS! ***                      |{}", BOLD, MAGENTA, RESET);
                 } else {
-                    println!("║  🎉 Player {} wins!                               ║",
-                        self.current_player.to_string());
+                    let player_color = if self.current_player == Cell::X { RED } else { BLUE };
+                    println!("{}{}|  *** PLAYER {} WINS! ***                          |{}",
+                        BOLD, player_color, self.current_player.to_string(), RESET);
                 }
-                println!("╚══════════════════════════════════════════════════╝");
-                println!("\n🏆 Winning positions: {:?}", pattern);
+                println!("{}{}+==================================================+{}", BOLD, GREEN, RESET);
+                println!("\n{} >> Winning positions: {:?}{}", YELLOW, pattern, RESET);
                 self.game_active = false;
                 break;
             }
 
             // Check for draw
             if self.is_board_full() {
+                const CYAN: &str = "\x1b[36m";
+                const YELLOW: &str = "\x1b[33m";
+                const RESET: &str = "\x1b[0m";
+                const BOLD: &str = "\x1b[1m";
+
                 self.clear_screen();
                 self.display_board();
-                println!("╔══════════════════════════════════════════════════╗");
-                println!("║  🤝 It's a draw!                                 ║");
-                println!("╚══════════════════════════════════════════════════╝");
+                println!("\n{}{}+==================================================+{}", BOLD, CYAN, RESET);
+                println!("{}{}|  *** IT'S A DRAW! ***                            |{}", BOLD, YELLOW, RESET);
+                println!("{}{}+==================================================+{}", BOLD, CYAN, RESET);
                 self.game_active = false;
                 break;
             }
@@ -306,8 +358,13 @@ impl Game {
     }
 
     fn play_again() -> bool {
+        const CYAN: &str = "\x1b[36m";
+        const RED: &str = "\x1b[31m";
+        const RESET: &str = "\x1b[0m";
+        const BOLD: &str = "\x1b[1m";
+
         loop {
-            print!("\n🎮 Play again? (yes/no): ");
+            print!("\n{}{} >> Play again? (yes/no):{} ", BOLD, CYAN, RESET);
             io::stdout().flush().unwrap();
 
             let mut input = String::new();
@@ -317,22 +374,27 @@ impl Game {
             match input.as_str() {
                 "yes" | "y" => return true,
                 "no" | "n" => return false,
-                _ => println!("❌ Please enter 'yes' or 'no'"),
+                _ => println!("{}{} [X] Please enter 'yes' or 'no'{}", BOLD, RED, RESET),
             }
         }
     }
 }
 
 fn main() {
-    println!("\n╔══════════════════════════════════════════════════╗");
-    println!("║  Welcome to 4x4 Tic-Tac-Toe!                    ║");
-    println!("╚══════════════════════════════════════════════════╝");
+    const CYAN: &str = "\x1b[36m";
+    const GREEN: &str = "\x1b[32m";
+    const RESET: &str = "\x1b[0m";
+    const BOLD: &str = "\x1b[1m";
+
+    println!("\n{}{}+==================================================+{}", BOLD, CYAN, RESET);
+    println!("{}{}|  Welcome to 4x4 Tic-Tac-Toe!                    |{}", BOLD, CYAN, RESET);
+    println!("{}{}+==================================================+{}", BOLD, CYAN, RESET);
 
     loop {
         Game::display_instructions();
         let mode = Game::get_game_mode();
 
-        println!("\n⏎ Press Enter to start the game...");
+        println!("\n{} >> Press Enter to start the game...{}", GREEN, RESET);
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
 
@@ -340,9 +402,9 @@ fn main() {
         game.play();
 
         if !Game::play_again() {
-            println!("\n╔══════════════════════════════════════════════════╗");
-            println!("║  Thanks for playing! Goodbye! 👋                 ║");
-            println!("╚══════════════════════════════════════════════════╝\n");
+            println!("\n{}{}+==================================================+{}", BOLD, CYAN, RESET);
+            println!("{}{}|  Thanks for playing! Goodbye!                    |{}", BOLD, GREEN, RESET);
+            println!("{}{}+==================================================+{}\n", BOLD, CYAN, RESET);
             break;
         }
     }
