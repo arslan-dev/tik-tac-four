@@ -26,7 +26,7 @@ enum GameMode {
 }
 
 struct Game {
-    board: [Cell; 16],
+    board: [Cell; 25],
     current_player: Cell,
     game_mode: GameMode,
     game_active: bool,
@@ -35,7 +35,7 @@ struct Game {
 impl Game {
     fn new(mode: GameMode) -> Self {
         Game {
-            board: [Cell::Empty; 16],
+            board: [Cell::Empty; 25],
             current_player: Cell::X,
             game_mode: mode,
             game_active: true,
@@ -58,12 +58,12 @@ impl Game {
         const RED: &str = "\x1b[31m";
 
         println!();
-        println!("  {}+-------+-------+-------+-------+{}", CYAN, RESET);
+        println!("  {}+-------+-------+-------+-------+-------+{}", CYAN, RESET);
 
-        for row in 0..4 {
+        for row in 0..5 {
             print!("  {}|{}", CYAN, RESET);
-            for col in 0..4 {
-                let index = row * 4 + col;
+            for col in 0..5 {
+                let index = row * 5 + col;
                 let cell_str = match self.board[index] {
                     Cell::Empty => format!("{}  {:2}   {}", YELLOW, index, RESET),
                     Cell::X => format!("{}{}   X   {}{}", BOLD, RED, RESET, RESET),
@@ -74,12 +74,12 @@ impl Game {
             }
             println!();
 
-            if row < 3 {
-                println!("  {}+-------+-------+-------+-------+{}", CYAN, RESET);
+            if row < 4 {
+                println!("  {}+-------+-------+-------+-------+-------+{}", CYAN, RESET);
             }
         }
 
-        println!("  {}+-------+-------+-------+-------+{}", CYAN, RESET);
+        println!("  {}+-------+-------+-------+-------+-------+{}", CYAN, RESET);
         println!();
     }
 
@@ -91,15 +91,15 @@ impl Game {
         const BOLD: &str = "\x1b[1m";
 
         println!("\n{}{}+==================================================+{}", BOLD, CYAN, RESET);
-        println!("{}{}|         4x4 TIC-TAC-TOE GAME                     |{}", BOLD, CYAN, RESET);
+        println!("{}{}|         5x5 TIC-TAC-TOE GAME                     |{}", BOLD, CYAN, RESET);
         println!("{}{}+==================================================+{}", BOLD, CYAN, RESET);
         println!("\n{}{} Game Rules:{}", BOLD, GREEN, RESET);
-        println!("   {} * The board is 4x4 (16 cells){}", YELLOW, RESET);
+        println!("   {} * The board is 5x5 (25 cells){}", YELLOW, RESET);
         println!("   {} * Players take turns placing X or O{}", YELLOW, RESET);
-        println!("   {} * Get 4 in a row to win (horizontal, vertical, or diagonal){}", YELLOW, RESET);
-        println!("   {} * Cells are numbered 0-15{}", YELLOW, RESET);
+        println!("   {} * Get 5 in a row to win (horizontal, vertical, or diagonal){}", YELLOW, RESET);
+        println!("   {} * Cells are numbered 0-24{}", YELLOW, RESET);
         println!("\n{}{} How to play:{}", BOLD, GREEN, RESET);
-        println!("   {} * Enter the cell number (0-15) when prompted{}", YELLOW, RESET);
+        println!("   {} * Enter the cell number (0-24) when prompted{}", YELLOW, RESET);
         println!("   {} * Type 'quit' to exit the game{}", YELLOW, RESET);
         println!("\n{}+==================================================+{}", CYAN, RESET);
     }
@@ -139,7 +139,7 @@ impl Game {
     }
 
     fn is_valid_move(&self, position: usize) -> bool {
-        position < 16 && self.board[position] == Cell::Empty
+        position < 25 && self.board[position] == Cell::Empty
     }
 
     fn make_move(&mut self, position: usize) {
@@ -149,12 +149,14 @@ impl Game {
     fn check_winner(&self) -> Option<Vec<usize>> {
         let player = self.current_player;
         let win_patterns: Vec<Vec<usize>> = vec![
-            // Horizontal
-            vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11], vec![12, 13, 14, 15],
-            // Vertical
-            vec![0, 4, 8, 12], vec![1, 5, 9, 13], vec![2, 6, 10, 14], vec![3, 7, 11, 15],
-            // Diagonal
-            vec![0, 5, 10, 15], vec![3, 6, 9, 12],
+            // Horizontal (5 rows)
+            vec![0, 1, 2, 3, 4], vec![5, 6, 7, 8, 9], vec![10, 11, 12, 13, 14],
+            vec![15, 16, 17, 18, 19], vec![20, 21, 22, 23, 24],
+            // Vertical (5 columns)
+            vec![0, 5, 10, 15, 20], vec![1, 6, 11, 16, 21], vec![2, 7, 12, 17, 22],
+            vec![3, 8, 13, 18, 23], vec![4, 9, 14, 19, 24],
+            // Diagonals (2)
+            vec![0, 6, 12, 18, 24], vec![4, 8, 12, 16, 20],
         ];
 
         for pattern in win_patterns {
@@ -180,7 +182,7 @@ impl Game {
         loop {
             let player_symbol = self.current_player.to_string();
             let player_color = if self.current_player == Cell::X { RED } else { BLUE };
-            print!("{}{}Player {}{}, enter cell number (0-15) or 'quit': {}",
+            print!("{}{}Player {}{}, enter cell number (0-24) or 'quit': {}",
                    BOLD, player_color, player_symbol, RESET, RESET);
             io::stdout().flush().unwrap();
 
@@ -195,7 +197,7 @@ impl Game {
 
             match input.parse::<usize>() {
                 Ok(pos) if self.is_valid_move(pos) => return Some(pos),
-                Ok(_) => println!("{}{} [X] Invalid move! Cell must be between 0-15 and empty.{}", BOLD, RED, RESET),
+                Ok(_) => println!("{}{} [X] Invalid move! Cell must be between 0-24 and empty.{}", BOLD, RED, RESET),
                 Err(_) => println!("{}{} [X] Please enter a valid number or 'quit'.{}", BOLD, YELLOW, RESET),
             }
         }
@@ -203,12 +205,14 @@ impl Game {
 
     fn find_best_move(&self, player: Cell) -> Option<usize> {
         let win_patterns: Vec<Vec<usize>> = vec![
-            // Horizontal
-            vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11], vec![12, 13, 14, 15],
-            // Vertical
-            vec![0, 4, 8, 12], vec![1, 5, 9, 13], vec![2, 6, 10, 14], vec![3, 7, 11, 15],
-            // Diagonal
-            vec![0, 5, 10, 15], vec![3, 6, 9, 12],
+            // Horizontal (5 rows)
+            vec![0, 1, 2, 3, 4], vec![5, 6, 7, 8, 9], vec![10, 11, 12, 13, 14],
+            vec![15, 16, 17, 18, 19], vec![20, 21, 22, 23, 24],
+            // Vertical (5 columns)
+            vec![0, 5, 10, 15, 20], vec![1, 6, 11, 16, 21], vec![2, 7, 12, 17, 22],
+            vec![3, 8, 13, 18, 23], vec![4, 9, 14, 19, 24],
+            // Diagonals (2)
+            vec![0, 6, 12, 18, 24], vec![4, 8, 12, 16, 20],
         ];
 
         for pattern in win_patterns {
@@ -216,7 +220,7 @@ impl Game {
             let player_count = values.iter().filter(|&&c| c == player).count();
             let empty_count = values.iter().filter(|&&c| c == Cell::Empty).count();
 
-            if player_count == 3 && empty_count == 1 {
+            if player_count == 4 && empty_count == 1 {
                 for &pos in &pattern {
                     if self.board[pos] == Cell::Empty {
                         return Some(pos);
@@ -257,7 +261,7 @@ impl Game {
         }
 
         // Take center cells if available
-        let center_cells = vec![5, 6, 9, 10];
+        let center_cells = vec![6, 7, 8, 11, 12, 13, 16, 17, 18];
         let available_center: Vec<usize> = center_cells
             .iter()
             .copied()
@@ -271,7 +275,7 @@ impl Game {
         }
 
         // Take any available cell
-        let available_cells: Vec<usize> = (0..16)
+        let available_cells: Vec<usize> = (0..25)
             .filter(|&i| self.board[i] == Cell::Empty)
             .collect();
 
@@ -387,7 +391,7 @@ fn main() {
     const BOLD: &str = "\x1b[1m";
 
     println!("\n{}{}+==================================================+{}", BOLD, CYAN, RESET);
-    println!("{}{}|  Welcome to 4x4 Tic-Tac-Toe!                    |{}", BOLD, CYAN, RESET);
+    println!("{}{}|  Welcome to 5x5 Tic-Tac-Toe!                    |{}", BOLD, CYAN, RESET);
     println!("{}{}+==================================================+{}", BOLD, CYAN, RESET);
 
     loop {

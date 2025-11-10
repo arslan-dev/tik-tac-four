@@ -1,10 +1,10 @@
-# 4x4 Tic-Tac-Toe Console Game
+# 5x5 Tic-Tac-Toe Console Game
 
-A console-based 4x4 tic-tac-toe game written in Rust with two game modes.
+A console-based 5x5 tic-tac-toe game written in Rust with two game modes.
 
 ## Features
 
-- **4x4 Game Board**: Win by getting 4 X's or O's in a row
+- **5x5 Game Board**: Win by getting 5 X's or O's in a row
 - **Two Game Modes**:
   - Player vs Player: Play against a friend
   - Player vs Computer: Play against an AI opponent
@@ -38,23 +38,25 @@ A console-based 4x4 tic-tac-toe game written in Rust with two game modes.
 
 3. **Game Instructions**:
    - Select your game mode (1 for PvP, 2 for PvC)
-   - Cells are numbered 0-15
+   - Cells are numbered 0-24
    - Enter the cell number where you want to place your mark
-   - Get 4 in a row (horizontal, vertical, or diagonal) to win
+   - Get 5 in a row (horizontal, vertical, or diagonal) to win
    - Type 'quit' at any time to exit
 
 ## Game Board Layout
 
 ```
-  +-------+-------+-------+-------+
-  |   0   |   1   |   2   |   3   |
-  +-------+-------+-------+-------+
-  |   4   |   5   |   6   |   7   |
-  +-------+-------+-------+-------+
-  |   8   |   9   |  10   |  11   |
-  +-------+-------+-------+-------+
-  |  12   |  13   |  14   |  15   |
-  +-------+-------+-------+-------+
+  +-------+-------+-------+-------+-------+
+  |   0   |   1   |   2   |   3   |   4   |
+  +-------+-------+-------+-------+-------+
+  |   5   |   6   |   7   |   8   |   9   |
+  +-------+-------+-------+-------+-------+
+  |  10   |  11   |  12   |  13   |  14   |
+  +-------+-------+-------+-------+-------+
+  |  15   |  16   |  17   |  18   |  19   |
+  +-------+-------+-------+-------+-------+
+  |  20   |  21   |  22   |  23   |  24   |
+  +-------+-------+-------+-------+-------+
 ```
 
 The game uses ANSI colors:
@@ -66,32 +68,34 @@ The game uses ANSI colors:
 
 ## Winning Patterns
 
-- **Horizontal**: 0-1-2-3, 4-5-6-7, 8-9-10-11, 12-13-14-15
-- **Vertical**: 0-4-8-12, 1-5-9-13, 2-6-10-14, 3-7-11-15
-- **Diagonal**: 0-5-10-15, 3-6-9-12
+- **Horizontal**: 0-1-2-3-4, 5-6-7-8-9, 10-11-12-13-14, 15-16-17-18-19, 20-21-22-23-24
+- **Vertical**: 0-5-10-15-20, 1-6-11-16-21, 2-7-12-17-22, 3-8-13-18-23, 4-9-14-19-24
+- **Diagonal**: 0-6-12-18-24, 4-8-12-16-20
 
 ## Computer AI Strategy
 
 The computer AI follows this strategy:
-1. Try to complete 4 in a row to win
+1. Try to complete 5 in a row to win
 2. Block the player from winning
-3. Take center positions for strategic advantage
+3. Take center positions (6, 7, 8, 11, 12, 13, 16, 17, 18) for strategic advantage
 4. Choose random available positions
 
 ## Example Gameplay
 
 ```
-Player X, enter cell number (0-15) or 'quit': 5
+Player X, enter cell number (0-24) or 'quit': 12
 
-  +-------+-------+-------+-------+
-  |   0   |   1   |   2   |   3   |
-  +-------+-------+-------+-------+
-  |   4   |   X   |   6   |   7   |
-  +-------+-------+-------+-------+
-  |   8   |   9   |  10   |  11   |
-  +-------+-------+-------+-------+
-  |  12   |  13   |  14   |  15   |
-  +-------+-------+-------+-------+
+  +-------+-------+-------+-------+-------+
+  |   0   |   1   |   2   |   3   |   4   |
+  +-------+-------+-------+-------+-------+
+  |   5   |   6   |   7   |   8   |   9   |
+  +-------+-------+-------+-------+-------+
+  |  10   |  11   |   X   |  13   |  14   |
+  +-------+-------+-------+-------+-------+
+  |  15   |  16   |  17   |  18   |  19   |
+  +-------+-------+-------+-------+-------+
+  |  20   |  21   |  22   |  23   |  24   |
+  +-------+-------+-------+-------+-------+
 ```
 
 Note: In the actual game, the grid and text are displayed in vibrant colors!

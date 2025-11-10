@@ -4,7 +4,7 @@ This guide helps AI assistants and developers understand the project structure a
 
 ## Project Overview
 
-4x4 Tic-Tac-Toe console game written in Rust with two game modes (Player vs Player and Player vs Computer).
+5x5 Tic-Tac-Toe console game written in Rust with two game modes (Player vs Player and Player vs Computer).
 
 ## Cargo Commands
 
@@ -33,7 +33,7 @@ This guide helps AI assistants and developers understand the project structure a
 - **Cell enum**: Represents board cell state (Empty, X, O)
 - **GameMode enum**: Player vs Player or Player vs Computer
 - **Game struct**: Main game state and logic
-  - `board`: 16-element array representing 4x4 grid
+  - `board`: 25-element array representing 5x5 grid
   - `current_player`: Current turn (X or O)
   - `game_mode`: Selected game mode
   - `game_active`: Game state flag
@@ -51,17 +51,17 @@ This guide helps AI assistants and developers understand the project structure a
 
 ## Win Detection
 
-- Checks 10 patterns total:
-  - 4 horizontal rows
-  - 4 vertical columns
+- Checks 12 patterns total:
+  - 5 horizontal rows
+  - 5 vertical columns
   - 2 diagonals (main and anti-diagonal)
 
 ## AI Strategy
 
 Computer player (O) follows this priority:
-1. Try to complete 4 in a row to win
-2. Block opponent from winning (3 in a row)
-3. Take center positions (5, 6, 9, 10)
+1. Try to complete 5 in a row to win
+2. Block opponent from winning (4 in a row)
+3. Take center positions (6, 7, 8, 11, 12, 13, 16, 17, 18)
 4. Random available position
 
 ## Workflow
@@ -94,7 +94,7 @@ cargo run --release
 Then:
 1. Select game mode (1 or 2)
 2. Press Enter to start
-3. Enter cell numbers (0-15) to play
+3. Enter cell numbers (0-24) to play
 4. Type 'quit' to exit anytime
 
 ## Adding Features
@@ -104,4 +104,4 @@ When adding new features:
 2. Keep ASCII grid alignment (7 characters per cell)
 3. Update this CLAUDE.md if adding new commands or patterns
 4. Test both PvP and PvC modes
-5. Ensure game logic maintains the "4 in a row" win condition
+5. Ensure game logic maintains the "5 in a row" win condition
